@@ -87,7 +87,10 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            // Crear un token de acceso
+            // Revocar todos los tokens existentes del usuario para garantizar que solo hay un token activo
+            $user->tokens()->delete();
+
+            // Crear un nuevo token de acceso
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
