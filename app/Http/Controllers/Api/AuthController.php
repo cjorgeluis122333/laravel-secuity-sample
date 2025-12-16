@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -50,7 +51,7 @@ class AuthController extends Controller
                 'message' => 'Error de validacion',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al registrar el usuario',
@@ -103,7 +104,7 @@ class AuthController extends Controller
                 'message' => 'Error de validacion',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al iniciar sesion',
@@ -128,7 +129,7 @@ class AuthController extends Controller
                 'success' => true,
                 'message' => 'Sesion cerrada exitosamente',
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al cerrar sesion',
@@ -165,7 +166,7 @@ class AuthController extends Controller
                     'token_type' => 'Bearer',
                 ],
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al refrescar el token',
@@ -187,7 +188,7 @@ class AuthController extends Controller
                 'success' => true,
                 'data' => $request->user(),
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener el usuario',

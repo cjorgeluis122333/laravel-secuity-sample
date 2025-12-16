@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Auth\PostRequest;
 use App\Models\Post;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class PostController extends Controller
                 'success' => true,
                 'data' => $posts,
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener los posts',
@@ -62,7 +63,7 @@ class PostController extends Controller
                 'message' => 'Error de validacion',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear el post',
@@ -89,7 +90,7 @@ class PostController extends Controller
                 'success' => false,
                 'message' => 'Post no encontrado',
             ], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener el post',
@@ -139,7 +140,7 @@ class PostController extends Controller
                 'message' => 'Error de validacion',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al actualizar el post',
@@ -175,7 +176,7 @@ class PostController extends Controller
                 'success' => false,
                 'message' => 'Post no encontrado',
             ], 404);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error al eliminar el post',
