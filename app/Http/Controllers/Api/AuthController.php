@@ -3,21 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Http\Requests\Api\Auth\LoginRequest;
 use App\Http\Requests\Api\Auth\RegisterRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
-use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     /**
      * Registrar un nuevo usuario
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
      */
     public function register(RegisterRequest $request)
     {
@@ -46,7 +44,7 @@ class AuthController extends Controller
                     'token_type' => 'Bearer',
                 ],
             ], 201);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validacion',
@@ -63,9 +61,7 @@ class AuthController extends Controller
 
     /**
      * Iniciar sesion (login)
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     *
      */
     public function login(LoginRequest $request)
     {
@@ -101,7 +97,7 @@ class AuthController extends Controller
                     'token_type' => 'Bearer',
                 ],
             ], 200);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validacion',
@@ -118,7 +114,7 @@ class AuthController extends Controller
 
     /**
      * Cerrar sesion (logout)
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -143,7 +139,7 @@ class AuthController extends Controller
 
     /**
      * Refrescar el token
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -180,7 +176,7 @@ class AuthController extends Controller
 
     /**
      * Obtener el usuario autenticado
-     * 
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
