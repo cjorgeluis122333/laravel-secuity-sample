@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\Auth\PostRequest;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,6 +13,7 @@ class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * Get all post
      */
     public function index()
     {
@@ -34,23 +37,18 @@ class PostController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Insert new post
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         try {
-            $validated = $request->validate([
-                'title' => ['required', 'string', 'max:255'],
-                'content' => ['required', 'string'],
-                'published_at' => ['nullable', 'date'],
-                'status' => ['required', 'in:draft,published,archived'],
-            ]);
 
             $post = Post::create([
                 'user_id' => Auth::id(),
-                'title' => $validated['title'],
-                'content' => $validated['content'],
-                'published_at' => $validated['published_at'] ?? now(),
-                'status' => $validated['status'],
+                'title' => $request['title'],
+                'content' => $request['content'],
+                'published_at' => $request['published_at'] ?? now(),
+                'status' => $request['status'],
             ]);
 
             return response()->json([
@@ -75,6 +73,7 @@ class PostController extends Controller
 
     /**
      * Display the specified resource.
+     * Get posts by id
      */
     public function show(string $id)
     {
@@ -85,7 +84,7 @@ class PostController extends Controller
                 'success' => true,
                 'data' => $post,
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Post no encontrado',
@@ -129,7 +128,7 @@ class PostController extends Controller
                 'message' => 'Post actualizado exitosamente',
                 'data' => $post->load('user'),
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Post no encontrado',
@@ -171,7 +170,7 @@ class PostController extends Controller
                 'success' => true,
                 'message' => 'Post eliminado exitosamente',
             ], 200);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Post no encontrado',
