@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Requests\Api\Auth\LoginRequest;
+use App\Http\Requests\Api\Auth\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -17,15 +19,10 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         try {
-            // Validar los datos de entrada
-            $validated = $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'confirmed', Password::defaults()],
-            ]);
+            $validated = $request->validated();
 
             // Crear el usuario
             $user = User::create([
@@ -34,8 +31,11 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
             ]);
 
-            // Crear un token de acceso
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Obtener el nombre del dispositivo desde la solicitud (o un valor por defecto)
+            $deviceName = $request->input('device_name', 'web');
+
+            // Crear un token de acceso con el nombre del dispositivo
+            $token = $user->createToken($deviceName)->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -67,14 +67,10 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         try {
-            // Validar los datos de entrada
-            $validated = $request->validate([
-                'email' => ['required', 'string', 'email'],
-                'password' => ['required', 'string'],
-            ]);
+            $validated = $request->validated();
 
             // Buscar el usuario
             $user = User::where('email', $validated['email'])->first();
@@ -87,11 +83,14 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            // Revocar todos los tokens existentes del usuario para garantizar que solo hay un token activo
-            $user->tokens()->delete();
+            // Revocar todos los tokens exist// Obtener el nombre del dispositivo desde la solicitud (o un valor por defecto)
+            $deviceName = $request->header('User-Agent') ?? $request->input('device_name', 'web');
 
-            // Crear un nuevo token de acceso
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Revocar tokens existentes para el mismo dispositivo
+            $user->tokens()->where('name', $deviceName)->delete();
+
+            // Crear un nuevo token de acceso con el nombre del dispositivo
+            $token = $user->createToken($deviceName)->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -154,10 +153,12 @@ class AuthController extends Controller
             $user = $request->user();
 
             // Revocar el token anterior
-            $user->currentAccessToken()->delete();
+            $currentAccessToken = $user->currentAccessToken();
+            $deviceName = $currentAccessToken->name ?? 'web';
+            $currentAccessToken->delete();
 
-            // Crear un nuevo token
-            $token = $user->createToken('auth_token')->plainTextToken;
+            // Crear un nuevo token con el mismo nombre de dispositivo
+            $token = $user->createToken($deviceName)->plainTextToken;
 
             return response()->json([
                 'success' => true,
