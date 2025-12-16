@@ -5,53 +5,85 @@ Esta es una API RESTful desarrollada con Laravel para un sistema de blog con aut
 ## Características
 
 - **Autenticación Segura**: Implementada con Laravel Sanctum
+
 - **Modelos Relacionados**: Usuario, Post y Comentario con relaciones bien definidas
+
 - **CRUD Completo**: Operaciones Create, Read, Update, Delete para Posts y Comentarios
+
 - **Validación de Datos**: Validación robusta en todos los endpoints
+
 - **Control de Acceso**: Solo los propietarios pueden editar o eliminar sus propios posts y comentarios
+
 - **Manejo de Errores**: Respuestas JSON consistentes con códigos HTTP apropiados
 
 ## Estructura de la Base de Datos
 
 ### Tabla: users
+
 - `id`: ID único del usuario
+
 - `name`: Nombre del usuario
+
 - `email`: Email único del usuario
+
 - `password`: Contraseña hasheada
+
 - `email_verified_at`: Fecha de verificación de email
+
 - `created_at`: Fecha de creación
+
 - `updated_at`: Fecha de actualización
 
 ### Tabla: posts
+
 - `id`: ID único del post
+
 - `user_id`: ID del usuario propietario
+
 - `title`: Título del post
+
 - `content`: Contenido del post
+
 - `published_at`: Fecha de publicación
+
 - `status`: Estado del post (draft, published, archived)
+
 - `created_at`: Fecha de creación
+
 - `updated_at`: Fecha de actualización
 
 ### Tabla: comments
+
 - `id`: ID único del comentario
+
 - `post_id`: ID del post al que pertenece
+
 - `user_id`: ID del usuario que hizo el comentario
+
 - `content`: Contenido del comentario
+
 - `created_at`: Fecha de creación
+
 - `updated_at`: Fecha de actualización
 
 ## Relaciones
 
 - **Usuario → Posts**: Un usuario puede tener muchos posts (1:N)
+
 - **Usuario → Comentarios**: Un usuario puede tener muchos comentarios (1:N)
+
 - **Post → Comentarios**: Un post puede tener muchos comentarios (1:N)
+
 - **Post → Usuario**: Un post pertenece a un usuario (N:1)
+
 - **Comentario → Post**: Un comentario pertenece a un post (N:1)
+
 - **Comentario → Usuario**: Un comentario pertenece a un usuario (N:1)
 
 ## Endpoints de Autenticación
 
 ### Registrar Usuario
+
 ```
 POST /api/auth/register
 Content-Type: application/json
@@ -65,6 +97,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (201 Created):**
+
 ```json
 {
   "success": true,
@@ -84,6 +117,7 @@ Content-Type: application/json
 ```
 
 ### Iniciar Sesión
+
 ```
 POST /api/auth/login
 Content-Type: application/json
@@ -95,6 +129,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -114,12 +149,14 @@ Content-Type: application/json
 ```
 
 ### Obtener Usuario Autenticado
+
 ```
 GET /api/auth/me
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -134,12 +171,14 @@ Authorization: Bearer {token}
 ```
 
 ### Refrescar Token
+
 ```
 POST /api/auth/refresh-token
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -159,12 +198,14 @@ Authorization: Bearer {token}
 ```
 
 ### Cerrar Sesión
+
 ```
 POST /api/auth/logout
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -175,16 +216,20 @@ Authorization: Bearer {token}
 ## Endpoints de Posts
 
 ### Obtener Todos los Posts
+
 ```
 GET /api/posts
 Authorization: Bearer {token}
 ```
 
 **Parámetros de Query:**
+
 - `page`: Número de página (default: 1)
+
 - `per_page`: Posts por página (default: 15)
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -216,6 +261,7 @@ Authorization: Bearer {token}
 ```
 
 ### Crear Post
+
 ```
 POST /api/posts
 Authorization: Bearer {token}
@@ -230,6 +276,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (201 Created):**
+
 ```json
 {
   "success": true,
@@ -253,12 +300,14 @@ Content-Type: application/json
 ```
 
 ### Obtener Post por ID
+
 ```
 GET /api/posts/{id}
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -296,6 +345,7 @@ Authorization: Bearer {token}
 ```
 
 ### Actualizar Post
+
 ```
 PUT /api/posts/{id}
 Authorization: Bearer {token}
@@ -309,6 +359,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -332,12 +383,14 @@ Content-Type: application/json
 ```
 
 ### Eliminar Post
+
 ```
 DELETE /api/posts/{id}
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -348,16 +401,20 @@ Authorization: Bearer {token}
 ## Endpoints de Comentarios
 
 ### Obtener Todos los Comentarios
+
 ```
 GET /api/comments
 Authorization: Bearer {token}
 ```
 
 **Parámetros de Query:**
+
 - `page`: Número de página (default: 1)
+
 - `per_page`: Comentarios por página (default: 20)
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -392,6 +449,7 @@ Authorization: Bearer {token}
 ```
 
 ### Crear Comentario
+
 ```
 POST /api/comments
 Authorization: Bearer {token}
@@ -404,6 +462,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (201 Created):**
+
 ```json
 {
   "success": true,
@@ -431,12 +490,14 @@ Content-Type: application/json
 ```
 
 ### Obtener Comentario por ID
+
 ```
 GET /api/comments/{id}
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -463,6 +524,7 @@ Authorization: Bearer {token}
 ```
 
 ### Actualizar Comentario
+
 ```
 PUT /api/comments/{id}
 Authorization: Bearer {token}
@@ -474,6 +536,7 @@ Content-Type: application/json
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -501,12 +564,14 @@ Content-Type: application/json
 ```
 
 ### Eliminar Comentario
+
 ```
 DELETE /api/comments/{id}
 Authorization: Bearer {token}
 ```
 
 **Respuesta (200 OK):**
+
 ```json
 {
   "success": true,
@@ -517,7 +582,7 @@ Authorization: Bearer {token}
 ## Códigos de Error
 
 | Código | Descripción |
-|--------|-------------|
+| --- | --- |
 | 200 | OK - Solicitud exitosa |
 | 201 | Created - Recurso creado exitosamente |
 | 401 | Unauthorized - Credenciales inválidas o token expirado |
@@ -529,46 +594,57 @@ Authorization: Bearer {token}
 ## Requisitos de Seguridad
 
 - **Contraseñas**: Deben tener al menos 8 caracteres, incluir mayúsculas, minúsculas y números
+
 - **Tokens**: Los tokens de Sanctum expiran después de un período de inactividad
+
 - **CORS**: La API está configurada para aceptar solicitudes desde cualquier origen
+
 - **Validación**: Todos los datos de entrada se validan antes de procesarse
+
 - **Control de Acceso**: Solo los propietarios pueden editar o eliminar sus propios recursos
 
 ## Instalación y Configuración
 
 1. Clonar el repositorio:
+
 ```bash
 git clone https://github.com/cjorgeluis122333/laravel-secuity-sample.git
 cd laravel-secuity-sample
 ```
 
-2. Instalar dependencias:
+1. Instalar dependencias:
+
 ```bash
 composer install
 ```
 
-3. Configurar el archivo .env:
+1. Configurar el archivo .env:
+
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-4. Crear la base de datos:
+1. Crear la base de datos:
+
 ```bash
 touch database/database.sqlite
 ```
 
-5. Ejecutar migraciones:
+1. Ejecutar migraciones:
+
 ```bash
 php artisan migrate
 ```
 
-6. Ejecutar seeders (opcional):
+1. Ejecutar seeders (opcional ):
+
 ```bash
 php artisan db:seed
 ```
 
-7. Iniciar el servidor:
+1. Iniciar el servidor:
+
 ```bash
 php artisan serve
 ```
@@ -586,3 +662,4 @@ bash test_api.sh
 ## Licencia
 
 Este proyecto está bajo la licencia MIT.
+
