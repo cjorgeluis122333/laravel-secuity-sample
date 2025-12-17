@@ -49,9 +49,3 @@ php artisan db:seed
 ```
 La API estará disponible en http://localhost:8000/api
 
-## Pruebas
-Se incluye un script de prueba test_api.sh que prueba todos los endpoints:
-
-```Bash
-bash test_api.sh
-```
