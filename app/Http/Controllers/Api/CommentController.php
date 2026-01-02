@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\post\CommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use Exception;
@@ -38,19 +39,17 @@ class CommentController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Insert comment
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
         try {
-            $validated = $request->validate([
-                'post_id' => ['required', 'exists:posts,id'],
-                'content' => ['required', 'string'],
-            ]);
+
 
             $comment = Comment::create([
-                'post_id' => $validated['post_id'],
-                'user_id' => Auth::id(),
-                'content' => $validated['content'],
+                'post_id' => $request['post_id'],
+                'user_id' => Auth::id(),  //Get the id of the authentication user
+                'content' => $request['content'],
             ]);
 
             return response()->json([
@@ -75,10 +74,12 @@ class CommentController extends Controller
 
     /**
      * Display the specified resource.
+     * Show comment by ID
      */
     public function show(string $id)
     {
         try {
+            //When I use with I tell give me the comment and them get all userId in the relation and the
             $comment = Comment::with('user', 'post')->findOrFail($id);
 
             return response()->json([

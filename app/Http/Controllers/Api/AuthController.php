@@ -181,7 +181,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me(Request $request)
+    public function getUserInfo(Request $request)
     {
         try {
             return response()->json([

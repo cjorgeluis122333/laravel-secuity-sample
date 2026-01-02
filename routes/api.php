@@ -6,32 +6,19 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\CommentController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-// Rutas de autenticacion (sin proteccion)
+// Authenticate Routs
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
-// Rutas protegidas por autenticacion
+// Protected rout (Need the token for have access)
 Route::middleware('auth:sanctum')->group(function () {
-    // Rutas de autenticacion
+    // Authentication routs
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/refresh-token', [AuthController::class, 'refreshToken']);
-    Route::get('/auth/me', [AuthController::class, 'me']);
-
-    // Rutas de posts
+    Route::get('/auth/me', [AuthController::class, 'getUserInfo']);
+    // Posts Routs
     Route::apiResource('posts', PostController::class);
-
-    // Rutas de comentarios
+    // Comments routs
     Route::apiResource('comments', CommentController::class);
 });
 
