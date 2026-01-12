@@ -1,5 +1,12 @@
-# API de Blog - Documentación
 
+
+# Informe Api
+## ***Integrantes:***
+### Jorge Luis Castillo 
+### Lazaro Dario Mora 
+### Maria Lucia Alonso
+
+<br>
 Esta es una API RESTful desarrollada con Laravel para un sistema de blog con autenticación segura, gestión de posts y comentarios.
 
 ## Características
